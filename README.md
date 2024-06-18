@@ -49,26 +49,26 @@ const farcaster = new Farcaster(
 
 ### registry fid
 
-* [app fid registry](./example/app-fid-registry.ts)
+* [app fid registry](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/app-fid-registry.ts)
 
-* [user fid registry](./example/user-fid-registry.ts)
+* [user fid registry](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/user-fid-registry.ts)
 
 ### activitikey management
 
-* [add](./example/activitykey-add.ts)
+* [add](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/activitykey-add.ts)
 
-* [remove](./example/activitykey-remove.ts)
+* [remove](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/activitykey-remove.ts)
 
 ### fid management
 
-* [transfer](./example/transfer.ts)
+* [transfer](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/transfer.ts)
 
-* [recovery](./example/recovery.ts)
+* [recovery](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/recovery.ts)
 
 ### storage
 
-* [rent](./example/rent.ts)
+* [rent](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/rent.ts)
 
 ### fid information 
 
-* [fid](./example/fid-information.ts)
+* [fid](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/fid-information.ts)
