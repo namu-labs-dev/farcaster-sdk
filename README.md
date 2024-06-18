@@ -1,5 +1,7 @@
 # farcaster SDK
 
+해당 SDK는 farcaster onchain 제어를 목적으로합니다.
+
 ### on chain features
 
 * registry fid
