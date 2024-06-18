@@ -1,0 +1,26 @@
+{
+  "name": "farcaster-sdk",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "npx tsc"
+  },
+  "keywords": [
+    "farcaster",
+    "sdk",
+    "farcaster-sdk"
+  ],
+  "author": "namu labs",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@noble/curves": "^1.4.0",
+    "ethers": "^5.7.2",
+    "neverthrow": "^6.2.2",
+    "viem": "^2.14.2"
+  }
+}
