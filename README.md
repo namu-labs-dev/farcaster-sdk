@@ -23,6 +23,8 @@
 ### define
 
 ```ts
+import { Farcaster } from '@namulabsdev/farcaster-sdk';
+
 const PRIVATE_KEY = 'PRIVATE_KEY';
 
 const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");

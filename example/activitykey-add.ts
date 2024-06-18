@@ -11,7 +11,7 @@ import { ethers } from "ethers";
     const appFid = 1n;
     const nonce = await farcaster.getNonceKeyGateway(userWallet.address);
     const {
-        didAddEd25519PrivateKey, didAddEd25519PublicKey, param
+        ed25519d25519PrivateKey, ed25519PublicKey, param
     } = await farcaster.signAddSignature(
         userWallet, 
         appWallet, 
@@ -39,6 +39,6 @@ import { ethers } from "ethers";
     const receipt = await tx.wait();
     
     console.log(receipt);
-    console.log('privatekey (ED25519): ', didAddEd25519PrivateKey);
-    console.log('publickey  (ED25519): ', didAddEd25519PublicKey);
+    console.log('privatekey (ED25519): ', ed25519d25519PrivateKey);
+    console.log('publickey  (ED25519): ', ed25519PublicKey);
 })();

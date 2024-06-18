@@ -1,3 +1,4 @@
+// import { Farcaster } from "@namulabsdev/farcaster-sdk";
 import { Farcaster } from "../../src";
 import { ethers } from "ethers";
 
