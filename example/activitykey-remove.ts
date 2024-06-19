@@ -5,10 +5,10 @@ import { ed25519 } from '@noble/curves/ed25519';
 
 (async () => {
     const userWallet = new ethers.Wallet(
-        '0x4bbbf85ce3377467afe5d46f804f221813b2bb87f24d81f60f1fcdbf7cbf4356',
+        '0x7b68edaf8d4e0002a8456ff375f420e544fab8dedcf41f4948dec00f1ab0145e',
         provider,
     );
-    const removeActivityKey = '0x6bd3b931239881fce3a9f53b50abd23e2d76e2aac73c296d4d70d41244cbdd47';
+    const removeActivityKey = '0x66c51a4b94e40762b0549155924506e056695c09dd95c71c51759b8c71a8ad5b';
     const privateKeyBytes = ethers.utils.arrayify(
         removeActivityKey,
     );

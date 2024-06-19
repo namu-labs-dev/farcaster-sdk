@@ -1,7 +1,7 @@
 import { farcaster, provider } from "./common";
 import { ethers } from "ethers";
 
-const APP_PRIVATE_KEY = '0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6';
+const APP_PRIVATE_KEY = '0x7b68edaf8d4e0002a8456ff375f420e544fab8dedcf41f4948dec00f1ab0145e';
 const wallet = new ethers.Wallet(APP_PRIVATE_KEY, provider);
 
 (async () => {
@@ -16,7 +16,7 @@ const wallet = new ethers.Wallet(APP_PRIVATE_KEY, provider);
         return;
     } 
     const recoveryAddress = '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC';
-    const registerFidCalldata = await farcaster.registerIdGateWay(
+    const registerFidCalldata = await farcaster.getCalldataRegisterIdGateWay(
         recoveryAddress, 
         0n, 
     )

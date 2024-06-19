@@ -1,30 +1,45 @@
+import { ed25519 } from '@noble/curves/ed25519';
 import { wallet as appWallet, farcaster, provider } from './common';
 import { ethers } from "ethers";
+import { bytesToHex } from 'viem';
 
 (async () => {
     const userWallet = new ethers.Wallet(
-        '0x4bbbf85ce3377467afe5d46f804f221813b2bb87f24d81f60f1fcdbf7cbf4356',
+        '0x7b68edaf8d4e0002a8456ff375f420e544fab8dedcf41f4948dec00f1ab0145e',
         provider,
     );
     
     const deadline = BigInt(Math.floor(Date.now() / 1000) + (3600 * 24));
-    const appFid = 1n;
+    const appFid = await farcaster.getIdOf(appWallet.address);
     const nonce = await farcaster.getNonceKeyGateway(userWallet.address);
-    const {
-        ed25519d25519PrivateKey, ed25519PublicKey, param
-    } = await farcaster.signAddSignature(
-        userWallet, 
+    
+    // key 등록을 위한 키 생성(ED25519)
+    const ed25519PrivateKey =  ed25519.utils.randomPrivateKey();
+    const ed25519PublicKey = ed25519.getPublicKey(ed25519PrivateKey);
+    
+    // acticity key 등록을 위한 metadata 생성
+    const metadataSigForRegistryKey = await farcaster.signMetadataForRegistryKeyByAppOwner(
         appWallet, 
-        nonce,
-        appFid,
-        deadline
+        appFid, 
+        deadline, 
+        ed25519PrivateKey
     );
 
+    const includeAddKeySigParams= await farcaster.signAddActivityKeySig(
+        userWallet, 
+        metadataSigForRegistryKey, 
+        nonce,
+        deadline,
+        ed25519PublicKey,
+    );
+
+    console.log(includeAddKeySigParams);
+
     const calldata = await farcaster.contracts.keyGateway.populateTransaction.add(
-        param.keyType,
-        param.key,
-        param.metadataType,
-        param.metadata,
+        includeAddKeySigParams.keyType,
+        includeAddKeySigParams.key,
+        includeAddKeySigParams.metadataType,
+        includeAddKeySigParams.metadata,
     )
 
     const registerFidTxParam = {
@@ -38,7 +53,9 @@ import { ethers } from "ethers";
     const tx = await userWallet.sendTransaction(registerFidTxParam);
     const receipt = await tx.wait();
     
+    console.log("================== complete ==================");
     console.log(receipt);
-    console.log('privatekey (ED25519): ', ed25519d25519PrivateKey);
-    console.log('publickey  (ED25519): ', ed25519PublicKey);
+    console.log("\n==============================================");
+    console.log(`private key`, bytesToHex(ed25519PrivateKey))
+    console.log(`public  key`, bytesToHex(ed25519PublicKey))
 })();

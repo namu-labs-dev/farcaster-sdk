@@ -13,19 +13,16 @@ export declare class Farcaster {
     getRecoveryByFid(fid: BigInt): Promise<string>;
     getTotakActivityKeysByFid(fid: BigInt): Promise<bigint>;
     getTotakRemoveKeysByFid(fid: BigInt): Promise<bigint>;
-    registerIdGateWay(receveryAddress: string, unit: bigint): Promise<any>;
+    getCalldataRegisterIdGateWay(receveryAddress: string, unit: bigint): Promise<any>;
     signRegister(to: string, recovery: string, nonce: bigint, deadline: bigint, wallet: ethers.Wallet): Promise<Uint8Array | undefined>;
-    signAddSignature(userWallet: ethers.Wallet, appWallet: ethers.Wallet, nonce: bigint, appFid: bigint, deadline: bigint): Promise<{
-        ed25519d25519PrivateKey: `0x${string}`;
-        ed25519PublicKey: `0x${string}`;
-        param: {
-            keyType: number;
-            key: `0x${string}`;
-            metadataType: number;
-            metadata: `0x${string}`;
-            sig: `0x${string}`;
-            deadline: bigint;
-        };
+    signMetadataForRegistryKeyByAppOwner(appFidOwnerSigner: ethers.Wallet, appFid: bigint, deadline: bigint, ed2559privateKeyBytes: Uint8Array): Promise<`0x${string}`>;
+    signAddActivityKeySig(userWallet: ethers.Wallet, metadataSig: Hex, nonce: bigint, deadline: bigint, ed25519PublicKey: Uint8Array): Promise<{
+        keyType: number;
+        key: `0x${string}`;
+        metadataType: number;
+        metadata: `0x${string}`;
+        sig: `0x${string}`;
+        deadline: bigint;
     }>;
-    transferSignature(fid: bigint, toWallet: ethers.Wallet, nonce: bigint, deadline: bigint): Promise<Hex>;
+    signTransfer(fid: bigint, toWallet: ethers.Wallet, nonce: bigint, deadline: bigint): Promise<Hex>;
 }

@@ -2,8 +2,8 @@ import { farcaster, provider } from "./common";
 import { ethers } from "ethers";
 
 (async () => {
-    const ownerPrivateKey = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
-    const toPrivateKey = '0x4bbbf85ce3377467afe5d46f804f221813b2bb87f24d81f60f1fcdbf7cbf4356'
+    const ownerPrivateKey = '0x7b68edaf8d4e0002a8456ff375f420e544fab8dedcf41f4948dec00f1ab0145e';
+    const toPrivateKey = '0xe20e0200c2fb1eca38ddf3985fac10b747015cd985d4ff56bbc36d03d30c1b5a'
 
     const ownerWallet = new ethers.Wallet(ownerPrivateKey, provider);
     const toWallet = new ethers.Wallet(toPrivateKey, provider);
@@ -13,7 +13,7 @@ import { ethers } from "ethers";
 
     const fid = await farcaster.getIdOf(ownerWallet.address)
 
-    const signature = await farcaster.transferSignature(
+    const signature = await farcaster.signTransfer(
         fid,
         toWallet,
         nonce,

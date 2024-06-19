@@ -29,7 +29,6 @@ import {
     hexStringToBytes,
 } from './bytes';
 
-
 export class Farcaster {
     contractAddresses: IContracts;
     contracts: any;
@@ -90,7 +89,7 @@ export class Farcaster {
         return BigInt(totalKeys);
     }
 
-    async registerIdGateWay(receveryAddress: string, unit: bigint) {
+    async getCalldataRegisterIdGateWay(receveryAddress: string, unit: bigint) {
         return await this.contracts.idGateway.populateTransaction['register(address,uint256)'](receveryAddress, unit);
     }
 
@@ -116,16 +115,12 @@ export class Farcaster {
         return signatureBytes.value;
     }
 
-    async signAddSignature(userWallet: ethers.Wallet, appWallet: ethers.Wallet, nonce: bigint, appFid: bigint, deadline: bigint) {
+    async signMetadataForRegistryKeyByAppOwner(appFidOwnerSigner: ethers.Wallet, appFid: bigint, deadline: bigint, ed2559privateKeyBytes: Uint8Array) {
         const SIGNED_KEY_REQUEST_VALIDATOR_EIP_712_DOMAIN = GET_SIGNED_KEY_REQUEST_VALIDATOR_EIP_712_DOMAIN(
             this.contractAddresses.SIGNED_KEY_REQUEST_VALIDATOR_ADDRESS
         );
-        const KEY_GATEWAY_EIP_712_DOMAIN = GET_KEY_GATEWAY_EIP_712_DOMAIN(
-            this.contractAddresses.KEY_GATEWAY_ADDRESS
-        );
 
-        const privateKeyBytes = ed25519.utils.randomPrivateKey()
-        const accountPubKey = ed25519.getPublicKey(privateKeyBytes);
+        const accountPubKey = ed25519.getPublicKey(ed2559privateKeyBytes);
 
         const message = {
             requestFid: appFid,
@@ -134,7 +129,7 @@ export class Farcaster {
         };
 
         const signatureBytes = await ResultAsync.fromPromise(
-            appWallet._signTypedData(
+            appFidOwnerSigner._signTypedData(
                 SIGNED_KEY_REQUEST_VALIDATOR_EIP_712_DOMAIN,
                 { SignedKeyRequest: [...SIGNED_KEY_REQUEST_TYPE] },
                 { ...message }
@@ -146,16 +141,16 @@ export class Farcaster {
             err(signatureBytes.error);
             throw signatureBytes.error;
         }
+        const sig = bytesToHex(signatureBytes.value);
 
         const metadataStruct = {
             requestFid: message.requestFid,
-            requestSigner: appWallet.address,
-            signature: bytesToHex(signatureBytes.value),
+            requestSigner: appFidOwnerSigner.address,
+            signature: sig,
             deadline: message.deadline,
         }
 
-        // metadata
-        const encodedStruct = encodeAbiParameters(
+        const metadata = encodeAbiParameters(
             [
                 {
                     components: [
@@ -183,16 +178,24 @@ export class Farcaster {
             [metadataStruct as any],
         );
 
-        const signAddSig = await ResultAsync.fromPromise(
+        return metadata;
+    }
+
+    async signAddActivityKeySig(userWallet: ethers.Wallet, metadataSig: Hex, nonce: bigint, deadline: bigint, ed25519PublicKey: Uint8Array) {
+        const KEY_GATEWAY_EIP_712_DOMAIN = GET_KEY_GATEWAY_EIP_712_DOMAIN(
+            this.contractAddresses.KEY_GATEWAY_ADDRESS
+        );
+
+        const sig = await ResultAsync.fromPromise(
             userWallet._signTypedData(
                 KEY_GATEWAY_EIP_712_DOMAIN,
                 { Add: [...KEY_GATEWAY_ADD_TYPE] },
                 {
                     owner: userWallet.address,
                     keyType: 1,
-                    key: accountPubKey,
+                    key: ed25519PublicKey,
                     metadataType: 1,
-                    metadata: encodedStruct,
+                    metadata: metadataSig,
                     nonce: BigInt(nonce),
                     deadline: deadline,
                 }
@@ -200,27 +203,23 @@ export class Farcaster {
             (e) => { console.log(e); new Error('Failed to sign message.') }
         ).andThen((hex) => hexStringToBytes(hex));
 
-        if (!signAddSig.isOk()) {
-            err(signAddSig.error);
-            throw signAddSig.error
+        if (!sig.isOk()) {
+            err(sig.error);
+            throw sig.error
         };
 
         return {
-            ed25519d25519PrivateKey: bytesToHex(privateKeyBytes),
-            ed25519PublicKey: bytesToHex(accountPubKey),
-            param: {
-                keyType: 1,
-                key: bytesToHex(accountPubKey),
-                metadataType: 1,
-                metadata: encodedStruct,
-                sig: bytesToHex(signAddSig.value),
-                deadline,
-            }
+            keyType: 1,
+            key: bytesToHex(ed25519PublicKey),
+            metadataType: 1,
+            metadata: metadataSig,
+            sig: bytesToHex(sig.value),
+            deadline,
         };
     }
 
     // recovery시에도 해당 서명이 필요
-    async transferSignature(fid: bigint, toWallet: ethers.Wallet, nonce: bigint, deadline: bigint): Promise<Hex> {
+    async signTransfer(fid: bigint, toWallet: ethers.Wallet, nonce: bigint, deadline: bigint): Promise<Hex> {
         const ID_REGISTRY_EIP_712_DOMAIN = GET_ID_REGISTRY_EIP_712_DOMAIN(
             this.contractAddresses.ID_REGISTRY_ADDRESS
         );
@@ -244,6 +243,7 @@ export class Farcaster {
             throw signatureBytes.error;
         }
 
-        return bytesToHex(signatureBytes.value)
+        const sig = bytesToHex(signatureBytes.value);
+        return sig;
     }
 }
