@@ -41,13 +41,13 @@ export const provider = new ethers.providers.JsonRpcProvider("http://localhost:8
 export const wallet = new ethers.Wallet(APP_PRIVATE_KEY, provider);
 
 export const contracts = {
-    STORAGE_REGISTRY_ADDRESS: "0xe09ec2a7577fa557c16167ad08ae42c743f785c3",
+    STORAGE_REGISTRY_ADDRESS: "0x52b75ca18893cfaa0a10f7ccfec182d17ae30bfe",
     ID_REGISTRY_ADDRESS: "0x2e6bb0cfca31949032dfbead0e35d8d3481eeb63",
-    ID_GATEWAY_ADDRESS: "0x7a889cecd3165b32e394e36cc90b203050889718",
+    ID_GATEWAY_ADDRESS: "0xb744e44234ab8ce40800d799f6f8a74ba970d2a7",
     KEY_REGISTRY_ADDRESS: "0xf8ce9186abd669bc9ff7de7dbcb783f13fb808fd",
-    KEY_GATEWAY_ADDRESS: "0xc1cc9b3b017bb8cb19214d19817e07de0f15c25d",
+    KEY_GATEWAY_ADDRESS: "0x8be7849209c0f9bde447b720da5bb0a85927a8ec",
     SIGNED_KEY_REQUEST_VALIDATOR_ADDRESS: "0xe565f4f285d7318bede674e503bced1faa4e1bdf",
-    BUNDLER_ADDRESS: "0x8f5ef5fada19cfa9f09ed9b45c2692d8b5088ede",
+    BUNDLER_ADDRESS: "0x615f208e7dcae61408868c6b7f64ee8125cc56ce",
     RECOVERY_PROXY_ADDRESS: "0x0386afdf47d45becde81bd1cd1d1744199321851",
 }
 
