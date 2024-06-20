@@ -2,6 +2,16 @@
 
 해당 SDK는 farcaster onchain 제어를 목적으로합니다.
 
+### install
+
+```bash
+$ npm i @namulabsdev/farcaster-sdk
+
+or 
+
+$ yarn add @namulabsdev/farcaster-sdk
+```
+
 ### on chain features
 
 * registry fid
