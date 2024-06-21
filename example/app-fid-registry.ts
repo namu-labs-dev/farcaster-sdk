@@ -1,7 +1,7 @@
 import { farcaster, provider } from "./common";
 import { ethers } from "ethers";
 
-const APP_PRIVATE_KEY = '0x7b68edaf8d4e0002a8456ff375f420e544fab8dedcf41f4948dec00f1ab0145e';
+const APP_PRIVATE_KEY = '0xaebea620e3b5f5085de9017d56ef37088578b2b03f6315f7427eee79ce53dc46';
 const wallet = new ethers.Wallet(APP_PRIVATE_KEY, provider);
 
 (async () => {
