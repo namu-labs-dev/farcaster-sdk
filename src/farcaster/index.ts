@@ -115,6 +115,7 @@ export class Farcaster {
         return signatureBytes.value;
     }
 
+    // FIXME: metadata는 APP FID의 owner로 서명한다.
     async signMetadataForRegistryKeyByAppOwner(appFidOwnerSigner: ethers.Wallet, appFid: bigint, deadline: bigint, ed2559privateKeyBytes: Uint8Array) {
         const SIGNED_KEY_REQUEST_VALIDATOR_EIP_712_DOMAIN = GET_SIGNED_KEY_REQUEST_VALIDATOR_EIP_712_DOMAIN(
             this.contractAddresses.SIGNED_KEY_REQUEST_VALIDATOR_ADDRESS
@@ -181,7 +182,8 @@ export class Farcaster {
         return metadata;
     }
 
-    async signAddActivityKeySig(userWallet: ethers.Wallet, metadataSig: Hex, nonce: bigint, deadline: bigint, ed25519PublicKey: Uint8Array) {
+    // FIXME: contract wallet을 사용한다면 fidOwnerAddress는 userWallet.address와 다를 수 있다.
+    async signAddActivityKeySig(fidOwnerAddress: string, metadataSig: Hex, nonce: bigint, deadline: bigint, ed25519PublicKey: Uint8Array, userWallet: ethers.Wallet, ) {
         const KEY_GATEWAY_EIP_712_DOMAIN = GET_KEY_GATEWAY_EIP_712_DOMAIN(
             this.contractAddresses.KEY_GATEWAY_ADDRESS
         );
@@ -191,7 +193,7 @@ export class Farcaster {
                 KEY_GATEWAY_EIP_712_DOMAIN,
                 { Add: [...KEY_GATEWAY_ADD_TYPE] },
                 {
-                    owner: userWallet.address,
+                    owner: fidOwnerAddress,
                     keyType: 1,
                     key: ed25519PublicKey,
                     metadataType: 1,
@@ -219,18 +221,19 @@ export class Farcaster {
     }
 
     // recovery시에도 해당 서명이 필요
-    async signTransfer(fid: bigint, toWallet: ethers.Wallet, nonce: bigint, deadline: bigint): Promise<Hex> {
+    // FIXME: contract wallet을 사용한다면 toAddress는 userWallet.address와 다를 수 있다.
+    async signTransfer(fid: bigint, toAddress: string, nonce: bigint, deadline: bigint, userWallet: ethers.Wallet): Promise<Hex> {
         const ID_REGISTRY_EIP_712_DOMAIN = GET_ID_REGISTRY_EIP_712_DOMAIN(
             this.contractAddresses.ID_REGISTRY_ADDRESS
         );
 
         const signatureBytes = await ResultAsync.fromPromise(
-            toWallet._signTypedData(
+            userWallet._signTypedData(
                 ID_REGISTRY_EIP_712_DOMAIN,
                 { Transfer: [...ID_REGISTRY_TRANSFER_TYPE] },
                 {
                     fid,
-                    to: toWallet.address,
+                    to: toAddress,
                     nonce,
                     deadline,
                 }

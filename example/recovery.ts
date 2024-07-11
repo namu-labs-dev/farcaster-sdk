@@ -2,8 +2,8 @@ import { provider, farcaster } from "./common";
 import { ethers } from "ethers";
 
 (async () => {
-    const ownerPrivateKey = '0x7b68edaf8d4e0002a8456ff375f420e544fab8dedcf41f4948dec00f1ab0145e';
-    const recoveryPrivateKey = '0xe20e0200c2fb1eca38ddf3985fac10b747015cd985d4ff56bbc36d03d30c1b5a'
+    const ownerPrivateKey = 'PRIVATE_KEY';
+    const recoveryPrivateKey = 'PRIVATE_KEY'
 
     const ownerWallet = new ethers.Wallet(ownerPrivateKey, provider);
     const recoveryWallet = new ethers.Wallet(recoveryPrivateKey, provider);
@@ -14,9 +14,10 @@ import { ethers } from "ethers";
     const fid = await farcaster.getIdOf(ownerWallet.address)
     const signature = await farcaster.signTransfer(
         fid,
-        recoveryWallet,
+        recoveryWallet.address,
         nonce,
         deadline,
+        recoveryWallet
     )
 
     const calldata = await farcaster.contracts.idRegistry.populateTransaction.recover(

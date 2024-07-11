@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 
 (async () => {
     const userWallet = new ethers.Wallet(
-        '0x7b68edaf8d4e0002a8456ff375f420e544fab8dedcf41f4948dec00f1ab0145e',
+        'PRIVATE_KEY',
         provider,
     );
 

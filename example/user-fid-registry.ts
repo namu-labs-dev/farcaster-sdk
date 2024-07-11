@@ -4,12 +4,13 @@ import { ethers } from 'ethers';
 import { bytesToHex } from 'viem';
 
 const userWallet = new ethers.Wallet(
-    '0x7b68edaf8d4e0002a8456ff375f420e544fab8dedcf41f4948dec00f1ab0145e',
+    'PRIVATE_KEY',
     provider,
 );
 
 (async () => {
-    const recovery = '0xAb3FfE2213e629DC5Bdde7283F0A2Bc0128A5acd';
+
+    const recovery = 'ADDRESS';
 
     const price = await farcaster.getPrice(1n)
     const deadline = BigInt(Math.floor(Date.now() / 1000) + (3600 * 24));
@@ -47,11 +48,12 @@ const userWallet = new ethers.Wallet(
     const metadataSigForRegistryKey = await farcaster.signMetadataForRegistryKeyByAppOwner(appWallet, appFid, deadline, ed25519PrivateKey);
 
     const includeAddKeySigParams = await farcaster.signAddActivityKeySig(
-        userWallet, 
+        userWallet.address, 
         metadataSigForRegistryKey, 
         await farcaster.getNonceKeyGateway(userWallet.address),
         deadline,
-        ed25519PublicKey
+        ed25519PublicKey,
+        userWallet,
     );
     
     const registerCalldata = await farcaster.contracts.bundler.populateTransaction.register(
