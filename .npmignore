@@ -1,2 +1,3 @@
-**/*
-!/lib/**%
+example/
+src/
+node_modules/
