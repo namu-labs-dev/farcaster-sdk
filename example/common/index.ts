@@ -3,7 +3,7 @@ import { Farcaster } from "../../src";
 import { ethers } from "ethers";
 
 // APP FID의 owner의 private key를 지정한다.
-const APP_PRIVATE_KEY = 'APP FID OWNER PRIVATE KEY';
+const APP_PRIVATE_KEY = 'PRIVATE KEY';
 
 export const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545");
 export const wallet = new ethers.Wallet(APP_PRIVATE_KEY, provider);

@@ -19,6 +19,12 @@ export const GET_KEY_GATEWAY_EIP_712_DOMAIN = (address: string) =>({
     chainId: 10,
     verifyingContract: address,
 })
+export const GET_KEY_REGISTRY_EIP_712_DOMAIN = (address: string) =>({
+    name: "Farcaster KeyRegistry",
+    version: "1",
+    chainId: 10,
+    verifyingContract: address,
+})
 
 export const GET_ID_REGISTRY_EIP_712_DOMAIN = (address: string) => ({
     name: "Farcaster IdRegistry",
@@ -49,6 +55,13 @@ export const KEY_GATEWAY_ADD_TYPE = [
     { name: "nonce", type: "uint256" },
     { name: "deadline", type: "uint256" },
 ] as const;
+
+export const KEY_REGISTER_REMOVE_TYPE = [
+    { name: "owner", type: "address" },
+    { name: "key", type: "bytes" },
+    { name: "nonce", type: "uint256" },
+    { name: "deadline", type: "uint256" },
+]
 
 export const ID_REGISTRY_TRANSFER_TYPE = [
     { name: "fid", type: "uint256" },

@@ -12,7 +12,9 @@ import {
     SIGNED_KEY_REQUEST_TYPE,
     KEY_GATEWAY_ADD_TYPE,
     ID_REGISTRY_TRANSFER_TYPE,
-    IContracts, Hex
+    IContracts, Hex,
+    KEY_REGISTER_REMOVE_TYPE,
+    GET_KEY_REGISTRY_EIP_712_DOMAIN
 } from '../interface';
 
 import { 
@@ -218,6 +220,29 @@ export class Farcaster {
             sig: bytesToHex(sig.value),
             deadline,
         };
+    }
+
+    async signRemoveForActivityKeySig(fidOwnerAddress: string, nonce: bigint, deadline: bigint, ed25519PublicKey: Uint8Array, userWallet: ethers.Wallet) {
+        const sig = await ResultAsync.fromPromise(
+            userWallet._signTypedData(
+                GET_KEY_REGISTRY_EIP_712_DOMAIN(this.contractAddresses.KEY_REGISTRY_ADDRESS),
+                { Remove: [...KEY_REGISTER_REMOVE_TYPE] },
+                {
+                    owner: fidOwnerAddress,
+                    key: ed25519PublicKey,
+                    nonce: BigInt(nonce),
+                    deadline: deadline,
+                }
+            ),
+            (e) => { console.log(e); new Error('Failed to sign message.') }
+        ).andThen((hex) => hexStringToBytes(hex));
+
+        if (!sig.isOk()) {
+            err(sig.error);
+            throw sig.error
+        };
+
+        return sig.value;
     }
 
     // recovery시에도 해당 서명이 필요

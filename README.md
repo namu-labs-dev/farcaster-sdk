@@ -67,13 +67,21 @@ const farcaster = new Farcaster(
 
 * [add](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/activitykey-add.ts)
 
+* [addFor](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/activitykey-addFor.ts)
+
 * [remove](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/activitykey-remove.ts)
+
+* [removeFor](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/activitykey-removeFor.ts)
 
 ### fid management
 
 * [transfer](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/transfer.ts)
 
+* [transferFor](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/transferFor.ts)
+
 * [recovery](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/recovery.ts)
+
+* [recoveryFor](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/recoveryFor.ts)
 
 ### storage
 
