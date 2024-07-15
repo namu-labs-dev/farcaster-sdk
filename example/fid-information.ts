@@ -1,3 +1,4 @@
+import { KeyState } from '../src/interface/types';
 import { farcaster } from './common';
 
 (async () => {
@@ -17,6 +18,17 @@ import { farcaster } from './common';
 
     console.log(`activityTotalKeys: ${activityTotalKeys}`);
     console.log(`removeTotalKeys: ${removeTotalKeys}`);
+
+    console.log('==================')
+    for (let i = 0; i < activityTotalKeys; i++) {
+        const activityKey0 = await farcaster.getKeyAt(FID, KeyState.ADDED, i); 
+        console.log('ADDED >>>>>> ', activityKey0);
+    }
+
+    for (let i = 0 ; i < removeTotalKeys; i++) {
+        const activityKey0 = await farcaster.getKeyAt(FID, KeyState.REMOVED, i); 
+        console.log('REMOVED >>>> ', activityKey0);
+    }
 
     const nonceKeyRegistry = await farcaster.getNonceKeyRegistry(custody);
     const nonceKeyGateway = await farcaster.getNonceKeyGateway(custody);

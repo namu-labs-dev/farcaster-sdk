@@ -23,3 +23,9 @@ export interface ISignAddSignature {
         deadline: bigint;
     };
 }
+
+export enum KeyState {
+    NULL,
+    ADDED,
+    REMOVED,
+}

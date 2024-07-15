@@ -30,6 +30,7 @@ import {
 import {
     hexStringToBytes,
 } from './bytes';
+import { KeyState } from '../interface/types';
 
 export class Farcaster {
     contractAddresses: IContracts;
@@ -79,6 +80,10 @@ export class Farcaster {
 
     async getRecoveryByFid(fid: BigInt): Promise<string> {
         return await this.contracts.idRegistry.recoveryOf(fid);
+    }
+
+    async getKeyAt(fid: BigInt, state: KeyState, index: number): Promise<string> {
+        return await this.contracts.keyRegistry.keyAt(fid, state, index);
     }
 
     async getTotakActivityKeysByFid(fid: BigInt): Promise<bigint> {

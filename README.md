@@ -89,4 +89,8 @@ const farcaster = new Farcaster(
 
 ### fid information 
 
+FID의 custody, recovery address 조회
+
+added signer(activity) key, removed signer(activity) key 조회(ED25519)
+
 * [fid](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/fid-information.ts)
