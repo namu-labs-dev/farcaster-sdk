@@ -63,6 +63,10 @@ const farcaster = new Farcaster(
 
 * [user fid registry](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/user-fid-registry.ts)
 
+* [reigister](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/register.ts)
+
+* [reigisterFor](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/registerFor.ts)
+
 ### activitikey management
 
 * [add](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/activitykey-add.ts)
