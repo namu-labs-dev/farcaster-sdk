@@ -79,6 +79,12 @@ const farcaster = new Farcaster(
 
 ### fid management
 
+transfer: custody addrss를 다른 주소로 변경한다.
+
+recovery: recovery address를 custory address로 승격한다. (recovery를 수행하면 custody와 recovery가 동일해진다.)
+
+recovery change: recovery address를 다른 주소로 변경한다.
+
 * [transfer](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/transfer.ts)
 
 * [transferFor](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/transferFor.ts)
