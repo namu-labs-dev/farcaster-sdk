@@ -61,10 +61,18 @@ export const KEY_REGISTER_REMOVE_TYPE = [
     { name: "key", type: "bytes" },
     { name: "nonce", type: "uint256" },
     { name: "deadline", type: "uint256" },
-]
+] as const;
 
 export const ID_REGISTRY_TRANSFER_TYPE = [
     { name: "fid", type: "uint256" },
+    { name: "to", type: "address" },
+    { name: "nonce", type: "uint256" },
+    { name: "deadline", type: "uint256" },
+] as const;
+
+export const ID_REGISTRY_CHANGE_RECOVERY_ADDRESS_TYPE = [
+    { name: "fid", type: "uint256" },
+    { name: "from", type: "address" },
     { name: "to", type: "address" },
     { name: "nonce", type: "uint256" },
     { name: "deadline", type: "uint256" },

@@ -83,6 +83,10 @@ const farcaster = new Farcaster(
 
 * [recoveryFor](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/recoveryFor.ts)
 
+* [recoveryChange](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/recovery-change.ts)
+
+* [recoveryChangeFor](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/recovery-changeFor.ts)
+
 ### storage
 
 * [rent](https://github.com/namu-labs-dev/farcaster-sdk/blob/main/example/rent.ts)

@@ -2,8 +2,9 @@ import { ed25519 } from '@noble/curves/ed25519';
 import { provider, wallet as appWallet, farcaster } from './common';
 import { ethers } from 'ethers';
 import { bytesToHex } from 'viem';
+import { getContractWalletAddress } from './common/create2-factory';
 
-const userWallet = new ethers.Wallet(
+const ownerWallet = new ethers.Wallet(
     'OWNER PRIVATE KEY',
     provider,
 );
@@ -14,8 +15,11 @@ const userWallet = new ethers.Wallet(
 
     const price = await farcaster.getPrice(1n)
     const deadline = BigInt(Math.floor(Date.now() / 1000) + (3600 * 24));
+
+    const ownerContractAddress = await getContractWalletAddress(ownerWallet.address, 0);
+
     const appFid = await farcaster.getIdOf(appWallet.address)
-    const userFid = await farcaster.getIdOf(userWallet.address)
+    const userFid = await farcaster.getIdOf(ownerContractAddress)
 
     if (appFid === 0n) {
         console.log(`appFid is not registered: ${appFid}`);
@@ -31,13 +35,14 @@ const userWallet = new ethers.Wallet(
     console.log(`appFid: ${appFid}`);
     console.log(`userFid: ${userFid}`);
 
+
     // owner 등록을 위한 서명(FID 생성)
     const registerSignature = await farcaster.signRegister(
-        userWallet.address,
+        ownerContractAddress,
         recovery,
-        await farcaster.getNonceKeyRegistry(userWallet.address),
+        await farcaster.getNonceKeyRegistry(ownerContractAddress),
         deadline,
-        userWallet,
+        ownerWallet,
     );
     
     // key 등록을 위한 키 생성(ED25519)
@@ -48,17 +53,17 @@ const userWallet = new ethers.Wallet(
     const metadataSigForRegistryKey = await farcaster.signMetadataForRegistryKeyByAppOwner(appWallet, appFid, deadline, ed25519PrivateKey);
 
     const includeAddKeySigParams = await farcaster.signAddActivityKeySig(
-        userWallet.address, 
+        ownerContractAddress, 
         metadataSigForRegistryKey, 
-        await farcaster.getNonceKeyGateway(userWallet.address),
+        await farcaster.getNonceKeyGateway(ownerContractAddress),
         deadline,
         ed25519PublicKey,
-        userWallet,
+        ownerWallet,
     );
     
     const registerCalldata = await farcaster.contracts.bundler.populateTransaction.register(
         {
-            to: userWallet.address,
+            to: ownerContractAddress,
             recovery,
             sig: registerSignature,
             deadline
@@ -70,14 +75,14 @@ const userWallet = new ethers.Wallet(
     );
 
     const registerFidTxParam: any = {
-        from: userWallet.address,
+        from: ownerWallet.address,
         to: farcaster.contractAddresses.BUNDLER_ADDRESS,
         data: registerCalldata.data,
         value: price,
         gasLimit: 10000000n
     }
 
-    const tx = await userWallet.sendTransaction(registerFidTxParam);
+    const tx = await ownerWallet.sendTransaction(registerFidTxParam);
     const receipt = await tx.wait();
 
     console.log("================== complete ==================");

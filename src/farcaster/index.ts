@@ -14,7 +14,8 @@ import {
     ID_REGISTRY_TRANSFER_TYPE,
     IContracts, Hex,
     KEY_REGISTER_REMOVE_TYPE,
-    GET_KEY_REGISTRY_EIP_712_DOMAIN
+    GET_KEY_REGISTRY_EIP_712_DOMAIN,
+    ID_REGISTRY_CHANGE_RECOVERY_ADDRESS_TYPE
 } from '../interface';
 
 import { 
@@ -264,6 +265,36 @@ export class Farcaster {
                 {
                     fid,
                     to: toAddress,
+                    nonce,
+                    deadline,
+                }
+            ),
+            (e) => { console.log(e); new Error('Failed to sign message.') }
+        ).andThen((hex) => hexStringToBytes(hex));
+
+        if (!signatureBytes.isOk()) {
+            err(signatureBytes.error);
+            throw signatureBytes.error;
+        }
+
+        const sig = bytesToHex(signatureBytes.value);
+        return sig;
+    }
+
+    // FID의 recovery로 등록된 address를 다른 주소로 변경하기 위해 필요한 서명
+    async signChangeRecoveryAddress(fid: bigint, fromRecoveryAddress: string, toRecoveryAddress: string, nonce: bigint, deadline: bigint, userWallet: ethers.Wallet): Promise<Hex> {
+        const ID_REGISTRY_EIP_712_DOMAIN = GET_ID_REGISTRY_EIP_712_DOMAIN(
+            this.contractAddresses.ID_REGISTRY_ADDRESS
+        );
+
+        const signatureBytes = await ResultAsync.fromPromise(
+            userWallet._signTypedData(
+                ID_REGISTRY_EIP_712_DOMAIN,
+                { ChangeRecoveryAddress: [...ID_REGISTRY_CHANGE_RECOVERY_ADDRESS_TYPE] },
+                {
+                    fid,
+                    from: fromRecoveryAddress,
+                    to: toRecoveryAddress,
                     nonce,
                     deadline,
                 }
