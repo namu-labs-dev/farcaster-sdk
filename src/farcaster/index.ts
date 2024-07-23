@@ -75,6 +75,11 @@ export class Farcaster {
         return BigInt(nonce);
     }
 
+    async getNonceIdGateway(address: string): Promise<bigint> {
+        const nonce = await this.contracts.idGateway['nonces(address)'](address);
+        return BigInt(nonce);
+    }
+
     async getCustodyByFid(fid: BigInt): Promise<string> {
         return await this.contracts.idRegistry.custodyOf(fid);
     }
@@ -97,8 +102,22 @@ export class Farcaster {
         return BigInt(totalKeys);
     }
 
-    async getCalldataRegisterIdGateWay(receveryAddress: string, unit: bigint) {
-        return await this.contracts.idGateway.populateTransaction['register(address,uint256)'](receveryAddress, unit);
+    async getCalldataRegisterIdGateWay(receveryAddress: string) {
+        return await this
+            .contracts
+            .idGateway
+            .populateTransaction['register(address)'](
+                receveryAddress
+            );
+    }
+    
+    async getCalldataRegisterForIdGateWay(toAddress: string, receveryAddress: string, deadline: bigint, sig: Uint8Array) {
+        return await this
+            .contracts
+            .idGateway
+            .populateTransaction['registerFor(address,address,uint256,bytes)'](
+                toAddress, receveryAddress, deadline, sig
+            );
     }
 
     async signRegister(to: string, recovery: string, nonce: bigint, deadline: bigint, wallet: ethers.Wallet) {
