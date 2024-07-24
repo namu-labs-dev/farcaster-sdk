@@ -3,20 +3,20 @@ import { ethers } from "ethers";
 
 (async () => {
     const ownerPrivateKey = 'OWNER PRIVATE KEY';
-    const recoveryAddressPrivateKey = 'RECOVERY ADDRESS PRIVATE KEY';
+    const recoveryAddress = 'RECOVERY ADDRESS';
 
     const ownerWallet = new ethers.Wallet(ownerPrivateKey, provider);
-    const recoveryWallet = new ethers.Wallet(recoveryAddressPrivateKey, provider);
 
-    const calldata = await farcaster.contracts.idRegistry.populateTransaction.register(
-        recoveryWallet.address
+    const price = await farcaster.getPrice(1n);
+    const registerFidCalldata = await farcaster.getCalldataRegisterIdGateWay(
+        recoveryAddress
     )
 
     const registerFidTxParam = {
         from: ownerWallet.address,
-        to: farcaster.contractAddresses.ID_REGISTRY_ADDRESS,
-        data: calldata.data,
-        value: 0,
+        to: farcaster.contractAddresses.ID_GATEWAY_ADDRESS,
+        data: registerFidCalldata.data,
+        value: price,
         gasLimit: 10000000n
     }
 
